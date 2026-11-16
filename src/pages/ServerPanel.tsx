@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../lib/db'
 import { frDateTime } from '../lib/logic'
-import { connect, DEFAULT_API_URL, disconnect, getCfg, GOOGLE_CLIENT_ID, googleIdToken, syncNow, useSyncStatus, type SyncState } from '../lib/sync'
+import { connect, DEFAULT_API_URL, disconnect, getCfg, syncNow, useSyncStatus, type SyncState } from '../lib/sync'
 import { Card, Field } from '../ui'
 
 export const STATE_TXT: Record<SyncState, string> = {
@@ -59,17 +59,6 @@ export default function ServerPanel({ loginOnly = false }: { loginOnly?: boolean
       <Field label="E-mail"><input type="email" value={f.email} onChange={(e) => set('email', e.target.value)} autoCapitalize="off" /></Field>
       <Field label="Mot de passe" hint={f.mode === 'register' ? '8 caractères minimum' : undefined}><input type="password" value={f.password} onChange={(e) => set('password', e.target.value)} /></Field>
       {err && <p style={{ color: 'var(--red)' }}>{err}</p>}
-      {GOOGLE_CLIENT_ID && (
-        <button className="btn secondary block" style={{ marginBottom: 10 }} disabled={busy} onClick={async () => {
-          setBusy(true); setErr('')
-          try {
-            const idToken = await googleIdToken()
-            await connect({ url: f.url, email: '', password: '', mode: 'google', idToken, confirmReplace: () => confirm('Le serveur contient déjà des données. Les données de cet appareil seront remplacées par celles du serveur. Continuer ?') })
-            location.reload()
-          } catch (e) { setErr(e instanceof TypeError ? 'Serveur injoignable : vérifiez la connexion.' : (e as Error).message) }
-          finally { setBusy(false) }
-        }}>Continuer avec Google</button>
-      )}
       <button className="btn block" disabled={busy || !f.email || !f.password} onClick={async () => {
         setBusy(true); setErr('')
         try {
