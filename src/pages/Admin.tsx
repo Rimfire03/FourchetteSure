@@ -10,7 +10,8 @@ import ServerPanel from './ServerPanel'
 import { Card, Field, Page, UpdateDialog, useAuth, useCan } from '../ui'
 
 type Tab = 'rappels' | 'nettoyage' | 'produits' | 'users' | 'etab' | 'audit'
-const DAYS = ['D', 'L', 'M', 'M', 'J', 'V', 'S']
+// Semaine du lundi au dimanche ; valeur = Date.getDay() (0 = dimanche).
+const DAYS: [number, string][] = [[1, 'Lun'], [2, 'Mar'], [3, 'Mer'], [4, 'Jeu'], [5, 'Ven'], [6, 'Sam'], [0, 'Dim']]
 
 export default function Admin() {
   const isAdmin = useCan('users')
@@ -45,7 +46,7 @@ function RemindersAdmin() {
             <Field label="Heure"><input type="time" value={r.time} onChange={(e) => up(r.id, { time: e.target.value })} /></Field>
             <label className="row"><input type="checkbox" checked={r.photoRequired} onChange={(e) => up(r.id, { photoRequired: e.target.checked })} /> Photo obligatoire</label>
           </div>
-          <div className="row">{DAYS.map((d, i) => (
+          <div className="row">{DAYS.map(([i, d]) => (
             <button key={i} className={`tab ${r.days.includes(i) ? 'on' : ''}`} onClick={() => up(r.id, { days: r.days.includes(i) ? r.days.filter((x) => x !== i) : [...r.days, i] })}>{d}</button>))}</div>
           <Field label="Affecter à (vide = tous)">
             <select multiple value={r.assignedTo} onChange={(e) => up(r.id, { assignedTo: [...e.target.selectedOptions].map((o) => o.value) })}>

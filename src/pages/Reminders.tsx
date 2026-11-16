@@ -6,8 +6,6 @@ import { frDate, frDateTime, pad, reminderState, sampleDisposeDate, ymd } from '
 import { create } from '../lib/store'
 import { Badge, Card, Field, Page, PhotoPicker, ReadOnlyNote, Thumbs, useAuth, useCan, useTick } from '../ui'
 
-const DAYS = ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam']
-
 export default function Reminders() {
   useTick()
   const now = new Date()
@@ -42,7 +40,6 @@ export default function Reminders() {
           <Thumbs ids={l.photoIds} />
         </Card>
       ))}
-      <p className="note">Jours : {DAYS.join(' ')}</p>
     </Page>
   )
 }
