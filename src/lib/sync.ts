@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import Dexie from 'dexie'
 import { db } from './db'
 
 /**
@@ -31,7 +32,12 @@ export const schedule = (ms = 3000) => { if (timer) clearTimeout(timer); timer =
 
 function queue(tbl: string, id: unknown) {
   if (applying || !enabled) return
-  void db.outbox.put({ key: `${tbl}:${id}`, tbl, id: String(id), at: Date.now() }).then(() => schedule())
+  // Hors de la transaction du hook (sinon l'écriture dans outbox est perdue avec elle).
+  setTimeout(() => {
+    Dexie.ignoreTransaction(() => db.outbox.put({ key: `${tbl}:${id}`, tbl, id: String(id), at: Date.now() }))
+      .then(() => schedule())
+      .catch((e) => console.error('outbox', e))
+  }, 0)
 }
 
 export function installHooks() {
