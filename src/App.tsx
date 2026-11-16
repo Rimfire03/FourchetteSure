@@ -17,11 +17,13 @@ import OpenDates from './pages/OpenDates'
 import Regulation from './pages/Regulation'
 import Admin from './pages/Admin'
 import Export from './pages/Export'
+import ServerPanel from './pages/ServerPanel'
 
 function Setup({ onDone }: { onDone: () => void }) {
   const [name, setName] = useState('')
   const [pin, setPin] = useState('')
   const [etab, setEtab] = useState('Ma cantine')
+  const [srv, setSrv] = useState(false)
   return (
     <div className="login">
       <h1>Bienvenue</h1>
@@ -34,6 +36,9 @@ function Setup({ onDone }: { onDone: () => void }) {
         const u = await create(db.users, 'utilisateur', { name: name.trim(), role: 'admin', pinHash: await sha256(pin), active: true }, 'admin initial')
         setUser(u); onDone()
       }}>Créer et commencer</button>
+      <p className="note" style={{ textAlign: 'center', marginTop: 18 }}>Déjà un compte serveur (autre appareil) ?</p>
+      <button className="btn secondary block" onClick={() => setSrv(!srv)}>Se connecter au serveur</button>
+      {srv && <ServerPanel loginOnly />}
     </div>
   )
 }

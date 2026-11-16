@@ -49,6 +49,7 @@ export async function savePhoto(file: Blob): Promise<string> {
   const blob = await shrink(file)
   const id = uid()
   await db.photos.add({ id, blob, createdAt: Date.now() })
+  await db.photoQueue.put({ id }) // envoi au serveur dès que le réseau est là
   return id
 }
 

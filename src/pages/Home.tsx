@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../lib/db'
 import { cleaningStatus, expiryState, frDate, frDateTime, pad, reminderState, ymd } from '../lib/logic'
+import { SyncBadge } from './ServerPanel'
 import { APP_VERSION } from '../lib/update'
 import { askNotifPermission, notifSupported } from '../lib/notify'
 import { Badge, Card, Page, useAuth, useCan, useTick } from '../ui'
@@ -86,7 +87,8 @@ export default function Home() {
         <Link to="/export" className="btn">📄 Exporter mon dossier sanitaire</Link>
         {admin && <Link to="/admin" className="btn secondary">⚙️ Paramètres</Link>}
       </div>
-      <p className="note" style={{ marginTop: 24, textAlign: 'center' }}>FourchetteSûre v{APP_VERSION}</p>
+      <div style={{ marginTop: 24 }}><SyncBadge /></div>
+      <p className="note" style={{ textAlign: 'center' }}>FourchetteSûre v{APP_VERSION}</p>
     </Page>
   )
 }

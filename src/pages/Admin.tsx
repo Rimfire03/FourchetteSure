@@ -6,6 +6,7 @@ import { sha256 } from '../lib/session'
 import { create, update } from '../lib/store'
 import { checkUpdate, APP_VERSION, type UpdateInfo } from '../lib/update'
 import { addZone, delZone } from './Cleaning'
+import ServerPanel from './ServerPanel'
 import { Card, Field, Page, UpdateDialog, useAuth, useCan } from '../ui'
 
 type Tab = 'rappels' | 'nettoyage' | 'produits' | 'users' | 'etab' | 'audit'
@@ -146,6 +147,7 @@ function EtabAdmin() {
   return (
     <>
       {upd && <UpdateDialog info={upd} onClose={() => setUpd(null)} />}
+      <ServerPanel />
       <h3>Version {APP_VERSION}</h3>
       <button className="btn secondary" onClick={async () => { const u = await checkUpdate(); setUpd(u); setMsg(u ? '' : 'Application à jour (ou hors connexion).') }}>Vérifier les mises à jour</button>
       <Field label="Nom de l’établissement"><input defaultValue={name} key={name} onBlur={(e) => db.settings.put({ key: 'etabName', value: e.target.value })} /></Field>

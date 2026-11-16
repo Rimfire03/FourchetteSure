@@ -48,12 +48,15 @@ export interface Photo { id: string; blob: Blob; createdAt: number }
 export interface AuditRow { id: string; etabId: string; at: number; userId: string; userName: string; entity: string; entityId: string; action: string; detail: string }
 export interface RegSheet extends Base { theme: string; title: string; explanation: string; rule: string; example: string; reference: string; updated: string }
 export interface Setting { key: string; value: unknown }
+export interface OutboxRow { key: string; tbl: string; id: string; at: number }
+export interface PhotoQueueRow { id: string }
 
 class KitchenDB extends Dexie {
   users!: Table<User, string>; reminders!: Table<Reminder, string>; taskLogs!: Table<TaskLog, string>
   products!: Table<Product, string>; deliveries!: Table<Delivery, string>; cleaningItems!: Table<CleaningItem, string>
   cleaningLogs!: Table<CleaningLog, string>; openRefs!: Table<OpenRef, string>; opened!: Table<OpenedItem, string>
   photos!: Table<Photo, string>; audit!: Table<AuditRow, string>; regs!: Table<RegSheet, string>; settings!: Table<Setting, string>
+  outbox!: Table<OutboxRow, string>; photoQueue!: Table<PhotoQueueRow, string>
   constructor() {
     super('suivi-cuisine')
     this.version(1).stores({
@@ -62,6 +65,7 @@ class KitchenDB extends Dexie {
       cleaningItems: 'id,etabId', cleaningLogs: 'id,itemId,date,createdAt', openRefs: 'id,name',
       opened: 'id,status,dueYmd,openedAt', photos: 'id', audit: 'id,at,entity,entityId', regs: 'id,theme', settings: 'key',
     })
+    this.version(2).stores({ outbox: 'key,at', photoQueue: 'id' })
   }
 }
 export const db = new KitchenDB()
