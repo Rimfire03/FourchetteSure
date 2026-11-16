@@ -25,7 +25,7 @@ export default function ServerPanel({ loginOnly = false }: { loginOnly?: boolean
   const cfg = useLiveQuery(getCfg, [], undefined)
   const s = useSyncStatus()
   const pending = usePending()
-  const [f, setF] = useState({ url: DEFAULT_API_URL, email: '', password: '', code: '', etabName: '', mode: 'login' as 'login' | 'register' })
+  const [f, setF] = useState({ url: DEFAULT_API_URL, email: '', password: '', mode: 'login' as 'login' | 'register' })
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
   const set = (k: keyof typeof f, v: string) => setF({ ...f, [k]: v })
@@ -58,15 +58,11 @@ export default function ServerPanel({ loginOnly = false }: { loginOnly?: boolean
       <Field label="Adresse du serveur"><input value={f.url} onChange={(e) => set('url', e.target.value)} autoCapitalize="off" /></Field>
       <Field label="E-mail"><input type="email" value={f.email} onChange={(e) => set('email', e.target.value)} autoCapitalize="off" /></Field>
       <Field label="Mot de passe" hint={f.mode === 'register' ? '8 caractères minimum' : undefined}><input type="password" value={f.password} onChange={(e) => set('password', e.target.value)} /></Field>
-      {f.mode === 'register' && <>
-        <Field label="Nom de l’établissement"><input value={f.etabName} onChange={(e) => set('etabName', e.target.value)} /></Field>
-        <Field label="Code d’inscription"><input value={f.code} onChange={(e) => set('code', e.target.value)} autoCapitalize="off" /></Field>
-      </>}
       {err && <p style={{ color: 'var(--red)' }}>{err}</p>}
       <button className="btn block" disabled={busy || !f.email || !f.password} onClick={async () => {
         setBusy(true); setErr('')
         try {
-          await connect({ ...f, confirmReplace: () => confirm('Le serveur contient déjà des données. Les données de cet appareil seront remplacées par celles du serveur. Continuer ?') })
+          await connect({ url: f.url, email: f.email, password: f.password, mode: f.mode, confirmReplace: () => confirm('Le serveur contient déjà des données. Les données de cet appareil seront remplacées par celles du serveur. Continuer ?') })
           location.reload()
         } catch (e) { setErr(e instanceof TypeError ? 'Serveur injoignable : vérifiez la connexion.' : (e as Error).message) }
         finally { setBusy(false) }
