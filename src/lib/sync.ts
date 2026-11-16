@@ -9,6 +9,8 @@ import { db } from './db'
  * Un compte serveur = un établissement (partagé entre ses appareils) ; les profils PIN sont synchronisés dans `users`.
  */
 export const DEFAULT_API_URL = 'https://api.tlpc.fr/fourchettesure'
+/** ID client OAuth « Web » de Google Cloud (public). Vide = bouton Google masqué. */
+export const GOOGLE_CLIENT_ID = ''
 export const SYNCED = ['users', 'reminders', 'taskLogs', 'products', 'deliveries', 'cleaningItems', 'cleaningLogs', 'openRefs', 'opened', 'audit', 'regs'] as const
 type Tbl = (typeof SYNCED)[number]
 
@@ -182,12 +184,13 @@ async function pull(cfg: ServerCfg) {
 const hasLocalData = async () => (await Promise.all(['taskLogs', 'products', 'deliveries', 'cleaningLogs', 'opened'].map((t) => db.table(t).count()))).some((n) => n > 0)
 
 /** Connexion. Première synchro : serveur vide -> on envoie le local ; sinon le local est remplacé par le serveur. */
-export async function connect(o: { url: string; email: string; password: string; mode: 'login' | 'register'; confirmReplace: () => boolean }) {
+export async function connect(o: { url: string; email: string; password: string; mode: 'login' | 'register' | 'google'; idToken?: string; confirmReplace: () => boolean }) {
   const url = o.url.trim().replace(/\/$/, '')
-  const r = await raw(url, o.mode === 'register' ? '/auth/register' : '/auth/login', { method: 'POST', body: JSON.stringify({ email: o.email.trim(), password: o.password }) })
+  const path = o.mode === 'register' ? '/auth/register' : o.mode === 'google' ? '/auth/google' : '/auth/login'
+  const r = await raw(url, path, { method: 'POST', body: JSON.stringify(o.mode === 'google' ? { idToken: o.idToken } : { email: o.email.trim(), password: o.password }) })
   if (!r.ok) throw await fail(r)
-  const tk = (await r.json()) as { access: string; refresh: string }
-  const email = o.email.trim().toLowerCase()
+  const tk = (await r.json()) as { access: string; refresh: string; email?: string }
+  const email = (tk.email ?? o.email).trim().toLowerCase()
   const cfg: ServerCfg = { url, access: tk.access, refresh: tk.refresh, email }
 
   const prev = await getCfg()
@@ -224,4 +227,14 @@ export async function startSync() {
   window.addEventListener('online', () => void syncNow())
   setInterval(() => void syncNow(), 60_000)
   void syncNow()
+}
+
+/** Ouvre la fenêtre Google (Credential Manager sur Android, Google Identity Services sur le web) et renvoie le jeton ID. */
+export async function googleIdToken(): Promise<string> {
+  const { SocialLogin } = await import('@capgo/capacitor-social-login')
+  await SocialLogin.initialize({ google: { webClientId: GOOGLE_CLIENT_ID } })
+  const res = await SocialLogin.login({ provider: 'google', options: { scopes: ['email', 'profile'] } })
+  const g = res.result as { idToken?: string | null }
+  if (!g.idToken) throw new Error("Google n'a pas renvoyé de jeton")
+  return g.idToken
 }
