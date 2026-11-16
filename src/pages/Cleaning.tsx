@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, type CleaningItem } from '../lib/db'
 import { cleaningStatus, FREQ_LABEL, frDate, frDateTime, ymd, type Light } from '../lib/logic'
-import { create } from '../lib/store'
+import { create, remove, update } from '../lib/store'
 import { Badge, Card, Field, Page, PhotoPicker, Thumbs, useAuth, useCan } from '../ui'
 
 const LABEL: Record<Light, string> = { green: 'Fait', orange: 'À faire', red: 'En retard' }
 const ORDER: Record<Light, number> = { red: 0, orange: 1, green: 2 }
 
 export default function Cleaning() {
+  const configure = useCan('configure')
   const today = ymd(new Date())
   const [open, setOpen] = useState<string>()
   const rows = useLiveQuery(async () => {
@@ -20,7 +21,7 @@ export default function Cleaning() {
   }, [today], [])
   const history = useLiveQuery(() => db.cleaningLogs.orderBy('createdAt').reverse().limit(30).toArray(), [], [])
   return (
-    <Page title="Plan de nettoyage">
+    <Page title="Plan de nettoyage" actions={configure && <button className="btn small" onClick={() => addZone()}>+ Zone</button>}>
       <div className="row">
         {(['red', 'orange', 'green'] as Light[]).map((l) => <span key={l}><i className={`dot ${l}`} /> {LABEL[l]} ({rows.filter((r) => r.light === l).length})</span>)}
       </div>
@@ -31,6 +32,7 @@ export default function Cleaning() {
             <Badge tone={light}>{LABEL[light]}</Badge>
           </div>
           {open === it.id && <DoneForm item={it} onDone={() => setOpen(undefined)} />}
+          {open === it.id && configure && <button className="btn danger small" style={{ marginTop: 10 }} onClick={() => delZone(it)}>Supprimer cette zone</button>}
         </Card>
       ))}
       <h2>Historique</h2>
@@ -54,6 +56,7 @@ function DoneForm({ item, onDone }: { item: CleaningItem; onDone: () => void }) 
   const ok = write && (!item.photoRequired || photos.length > 0)
   return (
     <div>
+      {(item.product || item.dilution || item.contactMin) && <p className="note">Pré-rempli d’après la dernière fois : modifiez si besoin.</p>}
       <Field label="Produit utilisé"><input value={product} onChange={(e) => setProduct(e.target.value)} /></Field>
       <div className="row">
         <Field label="Dosage / dilution"><input value={dilution} onChange={(e) => setDilution(e.target.value)} /></Field>
@@ -66,8 +69,20 @@ function DoneForm({ item, onDone }: { item: CleaningItem; onDone: () => void }) 
           itemId: item.id, zone: item.zone, date: ymd(new Date()), userId: user.id, userName: user.name,
           product: product || undefined, dilution: dilution || undefined, contactMin: contact || undefined, rinsed, photoIds: photos,
         }, item.zone)
+        // Mémorise les valeurs saisies : préremplies à la prochaine validation de cette zone.
+        await update(db.cleaningItems, 'plan nettoyage', item.id, { product: product || undefined, dilution: dilution || undefined, contactMin: contact || undefined, rinse: rinsed })
         onDone()
       }}>✔ Nettoyage terminé</button>
     </div>
   )
+}
+
+export const addZone = () => {
+  const z = prompt('Nom de la zone ou de l’équipement ?')?.trim()
+  if (z) void create(db.cleaningItems, 'plan nettoyage', { zone: z, frequency: 'daily', photoRequired: false, rinse: true, active: true, createdYmd: ymd(new Date()) }, z)
+}
+
+// L’historique des nettoyages déjà validés est conservé (le nom de zone est stocké dans chaque ligne).
+export const delZone = (it: CleaningItem) => {
+  if (confirm(`Supprimer « ${it.zone} » du plan ? L’historique déjà validé est conservé.`)) void remove(db.cleaningItems, 'plan nettoyage', it.id)
 }

@@ -57,3 +57,10 @@ export async function photoDataUrl(id: string): Promise<string | undefined> {
   if (!p) return
   return new Promise((res) => { const r = new FileReader(); r.onload = () => res(r.result as string); r.readAsDataURL(p.blob) })
 }
+
+/** Suppression avec trace d'audit (contenu supprimé conservé dans le journal). */
+export async function remove<T extends { id: string }>(table: Table<T, string>, entity: string, id: string) {
+  const before = await table.get(id)
+  await table.delete(id)
+  await logAudit(entity, id, 'suppression', before ?? '')
+}

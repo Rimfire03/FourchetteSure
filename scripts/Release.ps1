@@ -21,7 +21,11 @@ if (-not $NoPublish) {
 }
 
 npm run build; if ($LASTEXITCODE) { throw 'npm run build a echoue' }
-npx cap sync android; if ($LASTEXITCODE) { throw 'cap sync a echoue' }
+# CI=true evite le prompt de telemetrie Capacitor ; retire ensuite car gh refuse de publier en mode CI sans GH_TOKEN.
+$oldCI = $env:CI; $env:CI = 'true'
+npx cap sync android; $syncCode = $LASTEXITCODE
+$env:CI = $oldCI
+if ($syncCode) { throw 'cap sync a echoue' }
 Push-Location android
 try { .\gradlew.bat assembleRelease --no-daemon; if ($LASTEXITCODE) { throw 'gradle assembleRelease a echoue' } } finally { Pop-Location }
 

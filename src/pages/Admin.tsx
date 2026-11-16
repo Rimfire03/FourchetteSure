@@ -5,6 +5,7 @@ import { FREQ_LABEL, frDateTime, ymd, type Frequency } from '../lib/logic'
 import { sha256 } from '../lib/session'
 import { create, update } from '../lib/store'
 import { checkUpdate, APP_VERSION, type UpdateInfo } from '../lib/update'
+import { addZone, delZone } from './Cleaning'
 import { Card, Field, Page, UpdateDialog, useAuth, useCan } from '../ui'
 
 type Tab = 'rappels' | 'nettoyage' | 'produits' | 'users' | 'etab' | 'audit'
@@ -60,7 +61,7 @@ function CleaningAdmin() {
   const up = (id: string, p: Partial<CleaningItem>) => update(db.cleaningItems, 'plan nettoyage', id, p)
   return (
     <>
-      <p className="note">Fréquences = propositions de départ, à adapter à vos locaux. Une zone désactivée disparaît du planning mais reste dans l’historique.</p>
+      <p className="note">Fréquences = propositions de départ, à adapter à vos locaux. Une zone désactivée disparaît du planning ; une zone supprimée aussi (l’historique déjà validé est conservé).</p>
       {items.map((i) => (
         <Card key={i.id}>
           <div className="row sb"><b>{i.zone}</b><label className="row"><input type="checkbox" checked={i.active} onChange={(e) => up(i.id, { active: e.target.checked })} /> Actif</label></div>
@@ -70,6 +71,7 @@ function CleaningAdmin() {
             {i.frequency === 'custom' && <Field label="Tous les (jours)"><input type="number" min={1} value={i.customDays ?? 1} onChange={(e) => up(i.id, { customDays: Number(e.target.value) })} /></Field>}
           </div>
           <label className="row"><input type="checkbox" checked={i.photoRequired} onChange={(e) => up(i.id, { photoRequired: e.target.checked })} /> Photo obligatoire</label>
+          <button className="btn danger small" onClick={() => delZone(i)}>Supprimer</button>
           <div className="row">
             <Field label="Produit"><input defaultValue={i.product} onBlur={(e) => up(i.id, { product: e.target.value })} /></Field>
             <Field label="Dilution"><input defaultValue={i.dilution} onBlur={(e) => up(i.id, { dilution: e.target.value })} /></Field>
@@ -77,7 +79,7 @@ function CleaningAdmin() {
           </div>
         </Card>
       ))}
-      <button className="btn secondary" onClick={() => { const z = prompt('Zone ou équipement ?'); if (z) void create(db.cleaningItems, 'plan nettoyage', { zone: z, frequency: 'daily', photoRequired: false, rinse: true, active: true, createdYmd: ymd(new Date()) }) }}>+ Nouvelle zone</button>
+      <button className="btn secondary" onClick={() => addZone()}>+ Nouvelle zone</button>
     </>
   )
 }
