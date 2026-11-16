@@ -15,20 +15,17 @@ CREATE TABLE IF NOT EXISTS photos (
   PRIMARY KEY (etab_id, id));
 `
 
-/**
- * DATABASE_URL = connexion admin au serveur Postgres partagé (base `postgres`).
- * La base applicative DB_NAME est créée si absente, puis le schéma est appliqué dedans.
- */
-export async function openPool({ url, dbName }) {
-  const admin = new pg.Client({ connectionString: url })
+/** Connexion au serveur Postgres partagé ; la base applicative dbName est créée si absente, puis le schéma appliqué. */
+export async function openPool({ host, port, user, password, dbName, ssl = true }) {
+  // Le Postgres Dokploy impose TLS avec un certificat auto-signé : réseau interne Docker, pas de vérification de chaîne.
+  const base = { host, port, user, password, ssl: ssl ? { rejectUnauthorized: false } : false }
+  const admin = new pg.Client({ ...base, database: "postgres" })
   await admin.connect()
   try {
-    const r = await admin.query('SELECT 1 FROM pg_database WHERE datname = $1', [dbName])
-    if (!r.rowCount) await admin.query(`CREATE DATABASE "${dbName.replace(/"/g, '')}"`)
+    const r = await admin.query("SELECT 1 FROM pg_database WHERE datname = $1", [dbName])
+    if (!r.rowCount) await admin.query(`CREATE DATABASE "${dbName.replace(/"/g, "")}"`)
   } finally { await admin.end() }
-  const u = new URL(url)
-  u.pathname = '/' + dbName
-  const pool = new pg.Pool({ connectionString: u.toString(), max: 10 })
+  const pool = new pg.Pool({ ...base, database: dbName, max: 10 })
   await pool.query(SCHEMA)
   return pool
 }
