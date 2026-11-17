@@ -6,10 +6,10 @@ def (vMaj, vMin, vPat) = pkg.version.tokenize(".")*.toInteger()
 def ksPropsFile = new File(System.getenv("FS_KEYSTORE_PROPS") ?: "${System.getProperty("user.home")}/.tomline-signing/fourchettesure.properties")
 
 android {
-    namespace "fr.tomline.suivicuisine"
+    namespace "fr.tomline.fourchettesure"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "fr.tomline.suivicuisine"
+        applicationId "fr.tomline.fourchettesure"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode vMaj * 10000 + vMin * 100 + vPat

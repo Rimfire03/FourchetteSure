@@ -1,4 +1,4 @@
-package fr.tomline.suivicuisine;
+package fr.tomline.fourchettesure;
 
 import android.os.Bundle;
 import androidx.core.graphics.Insets;

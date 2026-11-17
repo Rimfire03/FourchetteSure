@@ -3,7 +3,7 @@
 Compte de publication : `dev.tlpc@gmail.com`.
 
 ## Avant le premier envoi (décisions définitives)
-- **Identifiant d'application** : actuellement `fr.tomline.suivicuisine` (`android/app/build.gradle` : `namespace` + `applicationId`, dossier Java `android/app/src/main/java/fr/tomline/suivicuisine`). Il ne pourra plus changer après la publication. Pour `fr.tomline.fourchettesure` : à changer **avant** le premier envoi (les APK déjà installés ne se mettront plus à jour, ils devront être réinstallés).
+- **Identifiant d'application** : `fr.tomline.fourchettesure` (définitif après le premier envoi). Les APK GitHub antérieurs à la v0.2.0 (`fr.tomline.suivicuisine`) sont une autre appli et ne se mettent pas à jour vers celle-ci.
 - **Clé de signature** : `%USERPROFILE%\.tomline-signing\fourchettesure.jks` + `.properties`. Utilisée comme **clé d'envoi** ; activer « Play App Signing » (recommandé) : Google garde la clé de distribution, la perte de la clé d'envoi reste récupérable via le support. **Sauvegardez ces deux fichiers hors de ce PC.**
 - **Niveau d'API cible** : 36 (obligatoire depuis le 31/08/2026), déjà réglé.
 
@@ -32,7 +32,7 @@ Compte de publication : `dev.tlpc@gmail.com`.
 - **Catégorie** : Entreprise (ou Productivité). **Tags** : professionnel, restauration.
 - **Coordonnées** : e-mail `dev.tlpc@gmail.com`.
 - **URL de la politique de confidentialité** : `https://rimfire03.github.io/FourchetteSure/` (GitHub Pages, dossier `docs` de la branche `main` ; à activer dans Settings → Pages).
-- **Visuels** (`store-assets/`) : icône 512×512 (`icon-512.png`), image de présentation 1024×500 (`feature-graphic.png`). **Captures d'écran** : au moins 2 (téléphone), à prendre sur un appareil réel avec des données de démonstration.
+- **Visuels** (`store-assets/`) : icône 512×512 (`icon-512.png`), image de présentation 1024×500 (`feature-graphic.png`). **Captures d'écran** : `store-assets/screenshots/` (5 captures 1080×1920 avec données fictives).
 
 ## Formulaires de la console
 - **Public cible** : adultes uniquement (18+), pas destiné aux enfants (évite le programme « Familles », malgré le mot « cantine scolaire »).
