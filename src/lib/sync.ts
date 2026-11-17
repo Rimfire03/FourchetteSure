@@ -211,6 +211,14 @@ export async function connect(o: { url: string; email: string; password: string;
   await syncNow()
 }
 
+/** Supprime le compte serveur et toutes ses données distantes, puis déconnecte. Les données locales restent sur l'appareil. */
+export async function deleteAccount() {
+  const cfg = await getCfg()
+  if (!cfg) return
+  await call<void>(cfg, '/me', { method: 'DELETE' }, true)
+  await disconnect()
+}
+
 export async function disconnect() {
   enabled = false
   await db.settings.delete('srv')

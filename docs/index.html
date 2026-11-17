@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FourchetteSûre – Politique de confidentialité</title>
+<style>
+  :root{--bg:#f4f7f5;--fg:#16231c;--pri:#1f7a4d;--line:#dbe4de}
+  @media (prefers-color-scheme:dark){:root{--bg:#101a15;--fg:#e8f0ec;--line:#2b3d33}}
+  body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  main{max-width:760px;margin:0 auto;padding:24px 16px 64px}
+  h1{color:var(--pri)} h2{margin-top:32px;border-bottom:1px solid var(--line);padding-bottom:4px}
+  a{color:var(--pri)} code{background:var(--line);padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<main>
+<h1>FourchetteSûre – Politique de confidentialité</h1>
+<p>Dernière mise à jour : 17 novembre 2026. Éditeur : TomLine prod&amp;co. Contact : <a href="mailto:dev.tlpc@gmail.com">dev.tlpc@gmail.com</a>.</p>
+
+<p>FourchetteSûre est un outil de suivi et de preuve du plan de maîtrise sanitaire des cuisines collectives (plats témoins, réceptions, nettoyage, dates après ouverture). Elle n’affiche aucune publicité, n’intègre aucun traceur ni outil d’analyse, et vos données ne sont ni vendues ni partagées avec des tiers.</p>
+
+<h2>Données traitées</h2>
+<ul>
+<li><strong>Données de traçabilité</strong> que vous saisissez : plats prélevés, produits (nom, lot, fournisseur, origine, dates), réceptions et non-conformités, nettoyages, dates après ouverture, paramétrages.</li>
+<li><strong>Photographies</strong> que vous prenez dans l’application (étiquettes, livraisons, bons de livraison, boîtes de prélèvement, etc.). L’appareil photo n’est utilisé que lorsque vous appuyez sur « Prendre une photo ».</li>
+<li><strong>Profils utilisateurs</strong> de l’établissement : prénom ou nom saisi, rôle, et empreinte (hachage) du code PIN. Le code PIN lui-même n’est jamais stocké en clair.</li>
+<li><strong>Compte serveur (facultatif)</strong> : adresse e-mail et mot de passe (stocké uniquement sous forme de hachage scrypt).</li>
+<li><strong>Journal d’audit</strong> : date, utilisateur et nature de chaque création, modification ou suppression.</li>
+</ul>
+
+<h2>Où sont stockées les données</h2>
+<ul>
+<li><strong>Sur votre appareil</strong> (base locale du navigateur intégré) : toutes les données, y compris sans connexion à Internet. Sans compte serveur, aucune donnée ne quitte l’appareil.</li>
+<li><strong>Sur notre serveur</strong> (api.tlpc.fr, hébergé en France par l’éditeur) <strong>uniquement si vous créez un compte et vous connectez</strong> : les données ci-dessus y sont synchronisées pour être partagées entre vos appareils. Les échanges sont chiffrés (HTTPS).</li>
+</ul>
+
+<h2>Services tiers contactés par l’application</h2>
+<ul>
+<li><strong>GitHub</strong> (api.github.com) : au démarrage, l’application demande la dernière version publiée pour proposer une mise à jour. Aucune donnée personnelle n’est envoyée au-delà de ce que révèle une requête réseau standard (adresse IP).</li>
+<li><strong>Reconnaissance d’étiquette (OCR)</strong> : le texte de la photo est lu <em>sur l’appareil</em>. Au premier usage, les données de langue française de la bibliothèque Tesseract sont téléchargées depuis un réseau de diffusion de contenu public ; la photo n’est pas envoyée.</li>
+</ul>
+
+<h2>Finalités et durée de conservation</h2>
+<p>Les données servent uniquement à tenir et à présenter votre dossier sanitaire (y compris lors d’un contrôle) et à synchroniser vos appareils. Elles sont conservées tant que vous ne les supprimez pas. Les enregistrements validés sont conservés dans le journal d’audit afin de garantir la traçabilité.</p>
+
+<h2 id="suppression">Suppression de votre compte et de vos données</h2>
+<ul>
+<li><strong>Dans l’application</strong> : Paramètres → Établissement &amp; sauvegarde → « Supprimer mon compte et mes données serveur ». Le compte et toutes les données synchronisées sont supprimés définitivement du serveur.</li>
+<li><strong>Par e-mail</strong> : écrivez à <a href="mailto:dev.tlpc@gmail.com">dev.tlpc@gmail.com</a> depuis l’adresse du compte en précisant « Suppression de compte FourchetteSûre ». Traitement sous 30 jours.</li>
+<li><strong>Données locales</strong> : elles restent sur l’appareil ; désinstaller l’application ou effacer ses données les supprime.</li>
+</ul>
+
+<h2>Vos droits</h2>
+<p>Conformément au RGPD, vous pouvez demander l’accès, la rectification, l’effacement ou la portabilité de vos données en écrivant à l’adresse de contact ci-dessus. Vous pouvez aussi saisir la CNIL (<a href="https://www.cnil.fr">cnil.fr</a>).</p>
+
+<h2>Responsabilité de l’établissement</h2>
+<p>Les noms des agents et toute donnée saisie sur des tiers relèvent de la responsabilité de l’établissement qui utilise l’outil, qui doit informer son personnel. L’application est un outil de suivi et de preuve : elle ne remplace pas le plan de maîtrise sanitaire propre à chaque établissement.</p>
+
+<h2>Enfants</h2>
+<p>L’application est destinée aux professionnels et ne s’adresse pas aux enfants.</p>
+
+<h2>Modifications</h2>
+<p>Toute modification de cette politique sera publiée sur cette page avec une nouvelle date de mise à jour.</p>
+</main>
+</body>
+</html>

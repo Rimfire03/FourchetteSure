@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500"><rect width="1024" height="500" fill="#1f7a4d"/>
+<circle cx="840" cy="250" r="190" fill="#16573a"/>
+<g transform="translate(840 250) scale(2.6) translate(-78 -60)"><g fill="#fff"><rect x="45" y="22" width="6" height="28" rx="3"/><rect x="57" y="22" width="6" height="28" rx="3"/><rect x="69" y="22" width="6" height="28" rx="3"/><path d="M45 46H75V52Q75 62 63 62H57Q45 62 45 52Z"/><rect x="57" y="58" width="6" height="40" rx="3"/></g><circle cx="92" cy="92" r="19" fill="#f2a93b" stroke="#fff" stroke-width="4"/><path d="M83 92L90 99L102 85" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="70" y="215" font-family="Segoe UI, Arial, sans-serif" font-size="84" font-weight="700" fill="#fff">FourchetteSûre</text>
+<text x="74" y="285" font-family="Segoe UI, Arial, sans-serif" font-size="38" fill="#e8f0ec">Traçabilité sanitaire de cuisine collective</text>
+<text x="74" y="340" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#bfe3cf">Plats témoins · Réceptions · Nettoyage · DLC</text></svg>

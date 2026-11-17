@@ -27,13 +27,17 @@ npx cap sync android; $syncCode = $LASTEXITCODE
 $env:CI = $oldCI
 if ($syncCode) { throw 'cap sync a echoue' }
 Push-Location android
-try { .\gradlew.bat assembleRelease --no-daemon; if ($LASTEXITCODE) { throw 'gradle assembleRelease a echoue' } } finally { Pop-Location }
+try { .\gradlew.bat assembleRelease bundleRelease --no-daemon; if ($LASTEXITCODE) { throw 'gradle assembleRelease/bundleRelease a echoue' } } finally { Pop-Location }
 
 $src = 'android\app\build\outputs\apk\release\app-release.apk'
 if (-not (Test-Path $src)) { throw "APK signe introuvable : $src (build non signe ?)" }
 $apk = "FourchetteSure-$tag.apk"
 Copy-Item $src $apk -Force
 Write-Output "APK : $apk"
+$aabSrc = 'android\app\build\outputs\bundle\release\app-release.aab'
+if (-not (Test-Path $aabSrc)) { throw "AAB signe introuvable : $aabSrc" }
+Copy-Item $aabSrc "FourchetteSure-$tag.aab" -Force
+Write-Output "AAB (Google Play) : FourchetteSure-$tag.aab"
 if ($NoPublish) { return }
 
 if ($NotesFile) { $Notes = Get-Content $NotesFile -Raw }

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../lib/db'
 import { frDateTime } from '../lib/logic'
-import { connect, DEFAULT_API_URL, disconnect, getCfg, syncNow, useSyncStatus, type SyncState } from '../lib/sync'
+import { connect, DEFAULT_API_URL, deleteAccount, disconnect, getCfg, syncNow, useSyncStatus, type SyncState } from '../lib/sync'
 import { Card, Field } from '../ui'
 
 export const STATE_TXT: Record<SyncState, string> = {
@@ -40,6 +40,10 @@ export default function ServerPanel({ loginOnly = false }: { loginOnly?: boolean
           <button className="btn small" onClick={() => void syncNow()}>Synchroniser maintenant</button>
           <button className="btn secondary small" onClick={() => { if (confirm('Se déconnecter du serveur ? Les données restent sur cet appareil.')) void disconnect() }}>Se déconnecter</button>
         </div>
+        <button className="btn danger small" style={{ marginTop: 10 }} onClick={async () => {
+          if (!confirm('Supprimer définitivement votre compte serveur et toutes les données synchronisées ? Les données de cet appareil sont conservées. Action irréversible.')) return
+          try { await deleteAccount() } catch (e) { alert(e instanceof TypeError ? 'Serveur injoignable : réessayez avec une connexion.' : (e as Error).message) }
+        }}>Supprimer mon compte et mes données serveur</button>
         {s.state === 'auth' && <p className="note">Session expirée : déconnectez-vous puis reconnectez-vous.</p>}
       </Card>
     )
