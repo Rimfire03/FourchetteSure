@@ -19,11 +19,11 @@ Rappels journaliers (plats témoins, photo obligatoire) · Traçabilité produit
 - Les durées après ouverture sont volontairement vides : à renseigner d'après étiquette fabricant / procédure validée.
 - Fiches réglementaires = aide-mémoire à faire valider par le responsable (PMS) ; veille mensuelle à faire.
 
-## Versions et mises à jour
-- Version unique dans `package.json` (`versionName`/`versionCode` Android en sont déduits : `maj*10000 + min*100 + patch`). À incrémenter à la main avant chaque release.
-- Au démarrage, l'appli interroge `releases/latest` du dépôt GitHub `Rimfire03/FourchetteSure` et affiche un popup si une version plus récente existe (bouton « Télécharger » vers l'APK de la release, « Plus tard », « Ignorer cette version »). Aussi disponible dans Paramètres → Établissement & sauvegarde.
-- Release : `.\scripts\Release.ps1` (commit + push faits, `ANDROID_HOME` défini) → build, APK signé `FourchetteSure-v<version>.apk`, `gh release create`.
-- La clé de signature `%USERPROFILE%\.tomline-signing\fourchettesure.jks` (+ `.properties`) ne doit **jamais** être commitée ni perdue : sans elle, les mises à jour ne s'installent plus par-dessus l'ancienne version.
+## Versions
+- Version unique dans `package.json` (`versionName`/`versionCode` Android en sont déduits : `maj*10000 + min*100 + patch`). À incrémenter à la main avant chaque envoi.
+- Distribution : Google Play (test interne puis production), mises à jour gérées par Play. Plus de contrôle de mise à jour intégré à l'appli.
+- `.\scripts\Release.ps1 -NoPublish` : build, APK + AAB signés `FourchetteSure-v<version>.apk/.aab` ; sans `-NoPublish`, crée aussi une release GitHub avec l'APK.
+- La clé de signature `%USERPROFILE%\.tomline-signing\fourchettesure.jks` (+ `.properties`) ne doit **jamais** être commitée ni perdue.
 
 ## Synchronisation (hors-ligne d'abord)
 - Serveur : `api-tlpc` (dépôt privé `Rimfire03/api-tlpc`, Dokploy, base Postgres Mobile), appli enregistrée sous `https://api.tlpc.fr/fourchettesure` (`POST /_admin/apps` avec le `ADMIN_TOKEN`).

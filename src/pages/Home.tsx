@@ -3,7 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../lib/db'
 import { cleaningStatus, expiryState, frDate, frDateTime, pad, reminderState, ymd } from '../lib/logic'
 import { SyncBadge } from './ServerPanel'
-import { APP_VERSION } from '../lib/update'
+import { APP_VERSION } from '../lib/version'
 import { askNotifPermission, notifSupported } from '../lib/notify'
 import { Badge, Card, Page, useAuth, useCan, useTick } from '../ui'
 

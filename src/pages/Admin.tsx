@@ -4,10 +4,10 @@ import { db, ROLE_LABEL, type CleaningItem, type OpenRef, type Reminder, type Ro
 import { FREQ_LABEL, frDateTime, ymd, type Frequency } from '../lib/logic'
 import { sha256 } from '../lib/session'
 import { create, update } from '../lib/store'
-import { checkUpdate, APP_VERSION, type UpdateInfo } from '../lib/update'
+import { APP_VERSION } from '../lib/version'
 import { addZone, delZone } from './Cleaning'
 import ServerPanel from './ServerPanel'
-import { Card, Field, Page, UpdateDialog, useAuth, useCan } from '../ui'
+import { Card, Field, Page, useAuth, useCan } from '../ui'
 
 type Tab = 'rappels' | 'nettoyage' | 'produits' | 'users' | 'etab' | 'audit'
 // Semaine du lundi au dimanche ; valeur = Date.getDay() (0 = dimanche).
@@ -144,13 +144,10 @@ function UsersAdmin() {
 function EtabAdmin() {
   const name = useLiveQuery(async () => (await db.settings.get('etabName'))?.value as string, [], '')
   const [msg, setMsg] = useState('')
-  const [upd, setUpd] = useState<UpdateInfo | null>(null)
   return (
     <>
-      {upd && <UpdateDialog info={upd} onClose={() => setUpd(null)} />}
       <ServerPanel />
       <h3>Version {APP_VERSION}</h3>
-      <button className="btn secondary" onClick={async () => { const u = await checkUpdate(); setUpd(u); setMsg(u ? '' : 'Application à jour (ou hors connexion).') }}>Vérifier les mises à jour</button>
       <Field label="Nom de l’établissement"><input defaultValue={name} key={name} onBlur={(e) => db.settings.put({ key: 'etabName', value: e.target.value })} /></Field>
       <h3>Sauvegarde</h3>
       <p className="note">Les données sont stockées sur cet appareil. Faites une sauvegarde régulière (fichier avec photos).</p>

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { sampleDisposeDate, cleaningStatus, expiryState, parseLabel, addDays, reminderState, isNewer } from './logic'
+import { sampleDisposeDate, cleaningStatus, expiryState, parseLabel, addDays, reminderState } from './logic'
 
 describe('logic', () => {
   it('plat témoin: élimination J+5', () => expect(sampleDisposeDate('2026-11-16')).toBe('2026-11-21'))
@@ -22,12 +22,6 @@ describe('logic', () => {
     expect(reminderState('11:30', false, '11:29')).toBe('pending')
     expect(reminderState('11:30', false, '11:30')).toBe('late')
     expect(reminderState('11:30', true, '12:00')).toBe('done')
-  })
-  it('isNewer', () => {
-    expect(isNewer('v0.0.2', '0.0.1')).toBe(true)
-    expect(isNewer('0.1.0', '0.0.9')).toBe(true)
-    expect(isNewer('0.0.1', '0.0.1')).toBe(false)
-    expect(isNewer('0.0.1', '0.0.10')).toBe(false)
   })
   it('parseLabel', () => {
     const g = parseLabel('Jambon blanc supérieur\nÀ consommer jusqu\'au 24/11/2026\nLOT: L2311A\nÀ conserver entre 0°C et +4°C')

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { db, type User } from './lib/db'
 import { can } from './lib/session'
 import { savePhoto } from './lib/store'
-import { APP_VERSION, skipVersion, type UpdateInfo } from './lib/update'
 
 export const UserCtx = createContext<{ user: User; logout: () => void } | null>(null)
 export const useAuth = () => useContext(UserCtx)!
@@ -101,19 +100,3 @@ export function useTick(ms = 30_000) {
 
 export const ReadOnlyNote = () => <p className="note">Profil en lecture seule : saisie impossible.</p>
 
-export function UpdateDialog({ info, onClose }: { info: UpdateInfo; onClose: () => void }) {
-  return (
-    <div className="modal" role="dialog" aria-modal="true" aria-label="Mise à jour disponible">
-      <div className="modal-box">
-        <h2>Mise à jour disponible</h2>
-        <p>Version <b>{info.version}</b> disponible (vous avez la {APP_VERSION}).</p>
-        {info.notes && <pre className="notes">{info.notes.slice(0, 800)}</pre>}
-        <div className="row">
-          <a className="btn" href={info.apkUrl} target="_blank" rel="noreferrer" onClick={onClose}>Télécharger</a>
-          <button className="btn secondary" onClick={onClose}>Plus tard</button>
-          <button className="btn secondary" onClick={() => { skipVersion(info.version); onClose() }}>Ignorer cette version</button>
-        </div>
-      </div>
-    </div>
-  )
-}

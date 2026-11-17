@@ -52,4 +52,4 @@ Compte de publication : `dev.tlpc@gmail.com`.
 2. Renseigner les formulaires ci-dessus et la fiche.
 3. Envoyer le `.aab` en **Test interne** d'abord et l'installer sur un téléphone avant la production.
 4. Comptes développeur **personnels** récents : Google impose un test fermé (environ 12 testeurs pendant 14 jours consécutifs) avant l'accès à la production ; à vérifier dans la console. Les comptes organisation (avec numéro D-U-N-S) en sont dispensés.
-5. Les versions suivantes passent par `Release.ps1` : nouveau `.aab` à envoyer dans la console ; l'APK GitHub reste utilisable en parallèle pour une installation hors Play, mais la mise à jour automatique par le popup de l'appli renvoie vers l'APK de GitHub, pas vers le Play Store (à adapter si la version Play devient la seule distribution).
+5. Les versions suivantes passent par `Release.ps1 -NoPublish` : nouveau `.aab` à envoyer dans la console (le code de version doit augmenter). Aucun contrôle de mise à jour dans l'appli : Play s'en charge.

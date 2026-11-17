@@ -6,8 +6,7 @@ import { getUser, restoreUser, setUser, sha256 } from './lib/session'
 import { seedIfEmpty } from './lib/seed'
 import { create, logAudit } from './lib/store'
 import { checkReminders } from './lib/notify'
-import { Field, UpdateDialog, UserCtx } from './ui'
-import { checkUpdate, isSkipped, type UpdateInfo } from './lib/update'
+import { Field, UserCtx } from './ui'
 import Home from './pages/Home'
 import Reminders, { ReminderTask } from './pages/Reminders'
 import Products, { ProductForm } from './pages/Products'
@@ -71,7 +70,6 @@ export default function App() {
   const [user, setU] = useState<User | null>(null)
   const users = useLiveQuery(() => db.users.filter((u) => u.active).toArray(), [], [] as User[])
   const [due, setDue] = useState<string[]>([])
-  const [update, setUpdate] = useState<UpdateInfo | null>(null)
 
   useEffect(() => { (async () => { await seedIfEmpty(); setU(await restoreUser()); setReady(true) })() }, [])
   useEffect(() => {
@@ -82,18 +80,12 @@ export default function App() {
     return () => clearInterval(t)
   }, [user])
 
-  useEffect(() => {
-    if (!user) return
-    void checkUpdate().then((u) => u && !isSkipped(u.version) && setUpdate(u))
-  }, [user?.id])
-
   if (!ready) return null
   if (!users.length && !user) return <Setup onDone={() => setU(restoreUserSync())} />
   if (!user) return <Login users={users} onDone={() => setU(restoreUserSync())} />
 
   return (
     <UserCtx.Provider value={{ user, logout: () => { setUser(null); setU(null) } }}>
-      {update && <UpdateDialog info={update} onClose={() => setUpdate(null)} />}
       <DueBanner ids={due} />
       <Routes>
         <Route path="/" element={<Home />} />
