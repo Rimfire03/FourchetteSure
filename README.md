@@ -1,5 +1,7 @@
 # FourchetteSûre
 
+[![Release](https://img.shields.io/github/v/release/Rimfire03/FourchetteSure)](https://github.com/Rimfire03/FourchetteSure/releases/latest) ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white) ![PWA](https://img.shields.io/badge/PWA-hors--ligne-5A0FC8?logo=pwa&logoColor=white)
+
 PWA de traçabilité sanitaire pour cantine scolaire (React + Vite + Dexie/IndexedDB). Hors-ligne, installable sur Android/tablette/PC.
 
 ```bash
